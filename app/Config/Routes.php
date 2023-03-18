@@ -2,6 +2,8 @@
 
 namespace Config;
 
+use App\Controllers\PropiedadesController;
+
 // Create a new instance of our RouteCollection class.
 $routes = Services::routes();
 
@@ -29,7 +31,14 @@ $routes->set404Override();
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'Home::index');
+//$routes->get('/', 'Home::index');
+
+$routes->resource('propiedades', ['controller' => 'PropiedadesController']);
+// $routes->get('propiedades', [PropiedadesController::class, 'index']);
+// $routes->get('propiedades/(:num)', [PropiedadesController::class, 'show/$1']);
+// $routes->post('propiedades/', [PropiedadesController::class, 'create']);
+// $routes->put('propiedades/(:num)', [PropiedadesController::class, 'update/$1']);
+//$routes->resource('/', ['controller => PropiedadesController']);
 
 /*
  * --------------------------------------------------------------------
