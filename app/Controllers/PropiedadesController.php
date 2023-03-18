@@ -50,29 +50,6 @@ class PropiedadesController extends ResourceController
         return $this->respondCreated($response);
     }
 
-    // public function update($id = null){
-    //     $model = new PropiedadesModel();
-    //     $data = [
-    //         'titulo' => $this->request->getVar('titulo'),
-    //         'precio' => $this->request->getVar('precio'),
-    //         'imagen' => $this->request->getVar('imagen'),
-    //         'descripcion' => $this->request->getVar('descripcion'),
-    //         'habitaciones' => $this->request->getVar('habitaciones'),
-    //         'wc' => $this->request->getVar('wc'),
-    //         'estacionamiento' => $this->request->getVar('estacionamiento'),
-    //         'creado' => $this->request->getVar('creado'),
-    //         'vendedores_id' => $this->request->getVar('vendedores_id'),
-    //     ];
-    //     $model->update($id,$data);
-    //     $response = [
-    //         'status'   => 200,
-    //         'error'    => null,
-    //         'messages' => [
-    //             'success' => 'Propiedad actualizada correctamente'
-    //         ]
-    //     ];
-    //     return $this->respond($response);
-    // }
     public function update($id = null){
         $model = model(PropiedadesModel::class);
         if(is_null($id)){
