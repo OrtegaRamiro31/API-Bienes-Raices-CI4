@@ -4,7 +4,7 @@
 
     use  CodeIgniter\Model;
 
-    class PropiedadesModel extends Model{
+    class PropiedadModel extends Model{
         protected $table = 'propiedades';
         protected $primaryKey = 'id';
         protected $allowedFields = ['titulo','precio','imagen','descripcion','habitaciones','wc','estacionamiento','creado','vendedores_id'];

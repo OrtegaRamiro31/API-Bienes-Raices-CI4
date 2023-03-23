@@ -4,6 +4,7 @@ namespace Config;
 
 use App\Controllers\PropiedadesController;
 use App\Controllers\PropiedadesVendedorController;
+use App\Controllers\VendedorController;
 
 // Create a new instance of our RouteCollection class.
 $routes = Services::routes();
@@ -36,6 +37,7 @@ $routes->set404Override();
 
 $routes->resource('api/propiedades', ['controller' => 'PropiedadesController']);
 $routes->get('api/propiedadesvendedor', [PropiedadesVendedorController::class, 'index']);
+$routes->get('api/vendedores', [VendedorController::class, 'index']);
 // $routes->get('propiedades', [PropiedadesController::class, 'index']);
 // $routes->get('propiedades/(:num)', [PropiedadesController::class, 'show/$1']);
 // $routes->post('propiedades/', [PropiedadesController::class, 'create']);

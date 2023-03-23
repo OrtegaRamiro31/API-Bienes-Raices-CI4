@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use CodeIgniter\RESTful\ResourceController;
 use CodeIgniter\API\ResponseTrait;
-use App\Models\PropiedadesModel;
+use App\Models\PropiedadModel;
 
 class PropiedadesController extends ResourceController
 {
@@ -12,13 +12,13 @@ class PropiedadesController extends ResourceController
     //get all properties
     public function index()
     {
-        $model = new PropiedadesModel();
+        $model = new PropiedadModel();
         $data['propiedades'] = $model->orderBy('id', 'ASC')->findAll();
         return $this->respond($data);
     }
 
     public function show($id = null){
-        $model = new PropiedadesModel();
+        $model = new PropiedadModel();
         $data = $model->where('id', $id)->first();
         if($data){
             return $this->respond($data);
@@ -27,7 +27,7 @@ class PropiedadesController extends ResourceController
     }
 
     public function create(){
-        $model = new PropiedadesModel();
+        $model = new PropiedadModel();
 
         $validation = \Config\Services::validation();
         $validation->setRules($model->validationRules);
@@ -67,7 +67,7 @@ class PropiedadesController extends ResourceController
     }
 
     public function update($id = null){
-        $model = model(PropiedadesModel::class);
+        $model = model(PropiedadModel::class);
         if(is_null($id)){
             $id = $this->request->getVar('id');
             var_dump($id);
@@ -96,19 +96,35 @@ class PropiedadesController extends ResourceController
     
     public function delete($id=null) {
     
-        $model = new PropiedadesModel();
-        $data = $model->where('id', $id)->delete($id);
-        if($data){
-            $model->delete($id);
+        $model = new PropiedadModel();
+
+        $property = $model->find($id);
+
+        if($property === null){
             $response = [
-                'status'   => 200,
-                'error'    => null,
+                'status'   => 404,
+                'error'    => "Propiedad no encontrada",
                 'messages' => [
-                    'success' => 'Propiedad eliminada correctamente'
+                    'success' => null
                 ]
             ];
-            return $this->respondDeleted($response);
+            return $this->respond($response);
         }
-        return $this->failNotFound('Propiedad no encontrada');
+        
+        $delete = $model->delete($id);
+
+        if(!$delete) {
+            return $this->failServerError('No pudo eliminarse la propiedad');
+        }
+
+        $response = [
+            'status'   => 204,
+            'error'    => null,
+            'messages' => [
+                'success' => 'Propiedad eliminada correctamente'
+            ]
+        ];
+        return $this->respond($response);
+        
     }
 }
