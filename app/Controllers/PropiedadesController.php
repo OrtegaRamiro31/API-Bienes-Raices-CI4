@@ -28,6 +28,11 @@ class PropiedadesController extends ResourceController
 
     public function create(){
         $model = new PropiedadesModel();
+
+        $validation = \Config\Services::validation();
+        $validation->setRules($model->validationRules);
+
+        
         $data = [
             'titulo' => $this->request->getVar('titulo'),
             'precio' => $this->request->getVar('precio'),
@@ -39,6 +44,16 @@ class PropiedadesController extends ResourceController
             'creado' => $this->request->getVar('creado'),
             'vendedores_id' => $this->request->getVar('vendedores_id'),
         ];
+        
+        if(!$validation->run($data)) {
+            $response = [
+                'status' => 400,
+                'error' => true,
+                'messages' => $validation->getErrors(),
+            ];
+            return $this->respond($response, 400);
+        }
+        
         $model->insert($data);
         $response = [
             'status'   => 201,
@@ -48,6 +63,7 @@ class PropiedadesController extends ResourceController
             ]
         ];
         return $this->respondCreated($response);
+
     }
 
     public function update($id = null){
