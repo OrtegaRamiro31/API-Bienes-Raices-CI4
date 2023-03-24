@@ -66,33 +66,47 @@ class PropiedadesController extends ResourceController
 
     }
 
-    public function update($id = null){
-        $model = model(PropiedadModel::class);
-        if(is_null($id)){
-            $id = $this->request->getVar('id');
-            var_dump($id);
-        }
-        $data = ['titulo' => $this->request->getVar('titulo'),
-                'precio' => $this->request->getVar('precio'),
-                'imagen' => $this->request->getVar('imagen'),
-                'descripcion' => $this->request->getVar('descripcion'),
-                'habitaciones' => $this->request->getVar('habitaciones'),
-                'wc' => $this->request->getVar('wc'),
-                'estacionamiento' => $this->request->getVar('estacionamiento'),
-                'creado' => $this->request->getVar('creado'),
-                'vendedores_id' => $this->request->getVar('vendedores_id')
-            ];
+    public function update($id = null)
+{
+    $model = new PropiedadModel();
 
-            $model->where('id',$id)->set($data)->update($id,$data);
-            $response = [
-                'status' => 200,
-                'error' => null,
-                'messages' => [
-                    'success' => 'Propiedad actualizada correctamente'
-                    ]
-                ];
-                return $this->respondUpdated($response);
+    // Verificar ID
+    if (is_null($id)) {
+        $id = $this->request->getVar('id');
     }
+
+    // Obtener los datos enviados desde el cliente
+    $data = [
+        'titulo' => $this->request->getVar('titulo'),
+        'precio' => $this->request->getVar('precio'),
+        'imagen' => $this->request->getVar('imagen'),
+        'descripcion' => $this->request->getVar('descripcion'),
+        'habitaciones' => $this->request->getVar('habitaciones'),
+        'wc' => $this->request->getVar('wc'),
+        'estacionamiento' => $this->request->getVar('estacionamiento'),
+        'creado' => $this->request->getVar('creado'),
+        'vendedores_id' => $this->request->getVar('vendedores_id')
+    ];
+
+    
+    // Ejecutar validación
+    if (!$model->validate($data)) {
+        return $this->respond(['status' => 400, 'error' => $model->errors()]);
+    }
+
+    // Actualizar
+    $model->where('id', $id)->set($data)->update();
+
+    // Respuesta
+    $updatedData = $model->find($id);
+    if ($updatedData) {
+        return $this->respond(
+            ['status' => 200, 
+            'data' => $updatedData, 
+            'message' => 'Propiedad actualizada correctamente.']);
+    }
+    return $this->failNotFound('No se pudo actualizar la propiedad con ID ' . $id);
+}
     
     public function delete($id=null) {
     

@@ -19,4 +19,17 @@ class PropiedadesVendedorController extends ResourceController
                                     ->findAll();
         return $this->respond($data);
     }
+
+    public function show($id = null){
+        $model = new PropiedadModel();
+        $data['propiedades'] = $model
+                                    ->select('propiedades.*, usuarios.nombre as nombre, usuarios.apellido as apellido')
+                                    ->join('usuarios', 'usuarios.id = propiedades.vendedores_id')
+                                    ->orderBy('propiedades.id', 'ASC')
+                                    ->find($id);
+        if($data){
+            return $this->respond($data);
+        }
+        return $this->failNotFound('No Data Found With id '.$id);
+    }
 }
