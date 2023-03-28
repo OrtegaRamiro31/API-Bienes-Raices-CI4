@@ -37,11 +37,18 @@ $routes->set404Override();
 //$routes->get('/', 'Home::index');
 
 $routes->resource('api/propiedades', ['controller' => 'PropiedadesController']);
+
 $routes->get('api/propiedadesvendedor', [PropiedadesVendedorController::class, 'index']);
 $routes->get('api/propiedadesvendedor/(:num)', [PropiedadesVendedorController::class, 'show']);
+
 $routes->get('api/vendedores', [VendedorController::class, 'index']);
 $routes->post('api/vendedores', [VendedorController::class, 'create']);
-$routes->get('api/vendedores-roles', [VendedorController::class, 'show']);
+$routes->put('api/vendedores/(:num)', [VendedorController::class, 'update/$1']);
+$routes->delete('api/vendedores/(:num)', [VendedorController::class, 'delete/$1']);
+
+$routes->get('api/vendedores-roles/(:num)', [VendedorController::class, 'show/$1']);
+$routes->get('api/vendedores-roles', [VendedorController::class, 'showAll']);
+
 $routes->get('api/roles', [RolesController::class, 'index']);
 
 // $routes->get('propiedades', [PropiedadesController::class, 'index']);
