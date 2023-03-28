@@ -32,7 +32,6 @@ class PropiedadesController extends ResourceController
         $validation = \Config\Services::validation();
         $validation->setRules($model->validationRules);
 
-        
         $data = [
             'titulo' => $this->request->getVar('titulo'),
             'precio' => $this->request->getVar('precio'),

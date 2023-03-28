@@ -12,8 +12,9 @@ class PropiedadesVendedorController extends ResourceController
     public function index()
     {
         $model = new PropiedadModel();
-        $data['propiedades'] = $model
-                                    ->select('propiedades.*, usuarios.nombre as nombre, usuarios.apellido as apellido')
+        $data['propiedadesVendedor'] = $model
+                                    ->select('propiedades.*,  usuarios.nombre as nombre, usuarios.apellido as apellido,
+                                    usuarios.telefono, usuarios.email, usuarios.rol_id')
                                     ->join('usuarios', 'usuarios.id = propiedades.vendedores_id')
                                     ->orderBy('propiedades.id', 'ASC')
                                     ->findAll();
