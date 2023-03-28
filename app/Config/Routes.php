@@ -4,6 +4,7 @@ namespace Config;
 
 use App\Controllers\PropiedadesController;
 use App\Controllers\PropiedadesVendedorController;
+use App\Controllers\RolesController;
 use App\Controllers\VendedorController;
 
 // Create a new instance of our RouteCollection class.
@@ -41,6 +42,7 @@ $routes->get('api/propiedadesvendedor/(:num)', [PropiedadesVendedorController::c
 $routes->get('api/vendedores', [VendedorController::class, 'index']);
 $routes->post('api/vendedores', [VendedorController::class, 'create']);
 $routes->get('api/vendedores-roles', [VendedorController::class, 'show']);
+$routes->get('api/roles', [RolesController::class, 'index']);
 
 // $routes->get('propiedades', [PropiedadesController::class, 'index']);
 // $routes->get('propiedades/(:num)', [PropiedadesController::class, 'show/$1']);

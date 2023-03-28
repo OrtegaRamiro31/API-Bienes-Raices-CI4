@@ -4,7 +4,7 @@
 
     use  CodeIgniter\Model;
 
-    class VendedorModel extends Model {
+    class RolesModel extends Model {
         protected $table = 'rol';
         protected $primaryKey = 'id';
         protected $allowedFields = ['rol'];

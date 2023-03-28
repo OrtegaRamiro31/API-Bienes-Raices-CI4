@@ -12,7 +12,7 @@
         protected $validationRules = [
             'nombre' => 'required|min_length[3]|alpha',
             'apellido' => 'required|min_length[3]|alpha',
-            'telefono' => 'required|integer|min_length[10]',
+            'telefono' => 'required|integer|min_length[10]|regex_match[/[1-9]{1}[0-9]{9}/]',
             'email' => 'required|min_length[10]|max_length[30]',
             'password' => 'required|min_length[8]',
             'rol_id' => 'required|integer',
