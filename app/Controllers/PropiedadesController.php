@@ -48,7 +48,9 @@ class PropiedadesController extends ResourceController
             $response = [
                 'status' => 400,
                 'error' => true,
-                'messages' => $validation->getErrors(),
+                'messages' => [
+                    'errors' => $validation->getErrors()
+                ],
             ];
             return $this->respond($response, 400);
         }
@@ -68,6 +70,9 @@ class PropiedadesController extends ResourceController
     public function update($id = null)
 {
     $model = new PropiedadModel();
+
+    $validation = \Config\Services::validation();
+    $validation->setRules($model->validationRules);
 
     // Verificar ID
     if (is_null($id)) {
@@ -89,9 +94,24 @@ class PropiedadesController extends ResourceController
 
     
     // Ejecutar validación
-    if (!$model->validate($data)) {
-        return $this->respond(['status' => 400, 'error' => $model->errors()]);
+    if(!$validation->run($data)){
+        $response = [
+          'status' => 400,
+          'error' => true,
+          'messages' => [
+                'errors' => $validation->getErrors()
+            ]  
+        ];
+        return $this->respond($response);
     }
+    // if (!$model->validate($data)) {
+    //     return $this->respond(
+    //         [
+    //             'status' => 400, 
+    //             'messages' => [
+    //                 'errors' => $model->errors()]
+    //             ]);
+    // }
 
     // Actualizar
     $model->where('id', $id)->set($data)->update();
@@ -99,10 +119,13 @@ class PropiedadesController extends ResourceController
     // Respuesta
     $updatedData = $model->find($id);
     if ($updatedData) {
-        return $this->respond(
-            ['status' => 200, 
-            'data' => $updatedData, 
-            'message' => 'Propiedad actualizada correctamente.']);
+        $response = [
+            'status' => 200, 
+            'error' => null, 
+            'messages' => [
+                'success'=>'Propiedad actualizada correctamente.']
+            ];
+        return $this->respond($response);
     }
     return $this->failNotFound('No se pudo actualizar la propiedad con ID ' . $id);
 }
@@ -116,9 +139,9 @@ class PropiedadesController extends ResourceController
         if($property === null){
             $response = [
                 'status'   => 404,
-                'error'    => "Propiedad no encontrada",
+                'error'    => true,
                 'messages' => [
-                    'success' => null
+                    'errors' => "Propiedad no encontrada"
                 ]
             ];
             return $this->respond($response);

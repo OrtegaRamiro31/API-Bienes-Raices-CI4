@@ -118,8 +118,8 @@ class VendedorController extends ResourceController
         if ($updatedData) {
             return $this->respond(
                 ['status' => 200, 
-                'data' => $updatedData, 
-                'message' => ['success'=>'Vendedor actualizado correctamente.']]);
+                'error' => false,
+                'messages' => ['success'=>'Vendedor actualizado correctamente.']]);
         }
         return $this->failNotFound('No se pudo actualizar el vendedor con ID ' . $id);
     }
