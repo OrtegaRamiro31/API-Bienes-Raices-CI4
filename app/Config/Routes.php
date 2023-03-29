@@ -52,7 +52,7 @@ $routes->get('api/vendedores-roles', [VendedorController::class, 'showAll']);
 
 $routes->get('api/roles', [RolesController::class, 'index']);
 
-// $routes->get('api/login', [AuthController::class, 'login']);
+$routes->get('api/login', [AuthController::class, 'login']);
 
 // $routes->get('propiedades', [PropiedadesController::class, 'index']);
 // $routes->get('propiedades/(:num)', [PropiedadesController::class, 'show/$1']);
