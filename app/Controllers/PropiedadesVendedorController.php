@@ -15,7 +15,7 @@ class PropiedadesVendedorController extends ResourceController
         $data['propiedadesVendedor'] = $model
                                     ->select('propiedades.*,  usuarios.nombre as nombre, usuarios.apellido as apellido,
                                     usuarios.telefono, usuarios.email, usuarios.rol_id')
-                                    ->join('usuarios', 'usuarios.id = propiedades.vendedores_id')
+                                    ->join('usuarios', 'usuarios.id = propiedades.vendedores_id', 'left')
                                     ->orderBy('propiedades.id', 'ASC')
                                     ->findAll();
         return $this->respond($data);
