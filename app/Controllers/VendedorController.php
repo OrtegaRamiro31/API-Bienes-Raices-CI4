@@ -41,6 +41,8 @@ class VendedorController extends ResourceController
             return $this->respond($response, 400);
         }
         
+        $data['password'] = password_hash($data['password'], PASSWORD_BCRYPT);
+        
         $model->insert($data);
         $response = [
             'status'   => 201,

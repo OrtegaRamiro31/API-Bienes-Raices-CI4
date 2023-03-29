@@ -2,6 +2,7 @@
 
 namespace Config;
 
+use App\Controllers\AuthController;
 use App\Controllers\PropiedadesController;
 use App\Controllers\PropiedadesVendedorController;
 use App\Controllers\RolesController;
@@ -50,6 +51,8 @@ $routes->get('api/vendedores-roles/(:num)', [VendedorController::class, 'show/$1
 $routes->get('api/vendedores-roles', [VendedorController::class, 'showAll']);
 
 $routes->get('api/roles', [RolesController::class, 'index']);
+
+// $routes->get('api/login', [AuthController::class, 'login']);
 
 // $routes->get('propiedades', [PropiedadesController::class, 'index']);
 // $routes->get('propiedades/(:num)', [PropiedadesController::class, 'show/$1']);
