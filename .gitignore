@@ -408,3 +408,5 @@ nb-configuration.xml
 
 # PERSONAL
 public/images
+
+.env

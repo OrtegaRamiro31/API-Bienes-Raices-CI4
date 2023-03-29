@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Models\VendedorModel;
 use CodeIgniter\RESTful\ResourceController;
-
+use Firebase\JWT\JWT;
 
 class AuthController extends ResourceController
 {
@@ -16,30 +16,47 @@ class AuthController extends ResourceController
         $password = $this->request->getVar('password');
         $user = $model->where("email", $email)->first();
 
-        // Si el usuario no existe... esperamos de 1 a 5 segundos y enviamos la respuesta
+        // Si el usuario no existe...
         if(is_null($user)){
             $response = [
+                'status' => 401,
                 'messages' => ['errors' => 'Credenciales inválidas'],
             ];
-            sleep(rand(1,5));
+            // sleep(rand(1,5));
             return $this->respond($response);
         }
 
         // Verificamos la contraseña. Devuelve true si coincide
         $passwordVerify = password_verify($password, $user['password']);
 
-        // Si la contraseña es inválida... esperamos de 1 a 5 segundos y enviamos la respuesta
+        // Si la contraseña es inválida...
         if(!$passwordVerify){
             $response = [
-                    'messages' => ['errors' => 'Credenciales inválidas']
+                'status' => 401,
+                'messages' => ['errors' => 'Credenciales inválidas']
             ];
-            sleep(rand(1,5));
+            // sleep(rand(1,5));
             return $this->respond($response);
         }
 
+        // JWT
+        $key = getenv('JWT_SECRET');
+        $iat = time(); // Tomamos fecha y hora actual
+        $exp = $iat + getenv('JWT_DURATION'); // Le sumamos 1 hora a $iat para la expiración
+        $payload = array(
+            'email' => $email,
+            'iat' => $iat,
+            'exp' => $exp
+        );
+
+        // Generamos el token
+        $token = JWT::encode($payload, $key, 'HS256');
+
         // Enviamos una respuesta si el email y password son correctos
         $response = [
-            'messages' => ['success' => 'Usuario logueado correctamente']
+            'status' => 200,
+            'messages' => ['success' => 'Usuario logueado correctamente'],
+            'token' => $token
         ];
         return $this->respond($response);        
     }
