@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\VendedorModel;
 use CodeIgniter\RESTful\ResourceController;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 class AuthController extends ResourceController
 {
@@ -59,5 +60,27 @@ class AuthController extends ResourceController
             'token' => $token
         ];
         return $this->respond($response);        
+    }
+
+    public function logout(){
+        $model = new VendedorModel();
+
+        $email = $this->request->getVar('email');
+        $token = $this->request->getVar('token');
+        $decode = JWT::decode($token, new Key(getenv('JWT_SECRET'), 'HS256'));
+        if($decode->email === $email) {
+            $response = [
+                'status' => 200,
+                'error' => false,
+                'messages' => ['success' => 'Se ha cerrado la sesión corractamente']
+            ];
+            return $this->respond($response);
+        }
+        $response = [
+            'status' => 401,
+            'error' => true,
+            'messages' => ['errors' => 'Ha ocurrido un problema al cerrar la sesión']
+        ];
+        return $this->respond($response);
     }
 }
