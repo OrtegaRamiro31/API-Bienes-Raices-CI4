@@ -26,6 +26,7 @@ class AuthController extends ResourceController
             return $this->respond($response);
         }
         $idUser = $user['id'];
+        $idRoleUser = $user['rol_id'];
 
         // Verificamos la contraseña. Devuelve true si coincide
         $passwordVerify = password_verify($password, $user['password']);
@@ -58,7 +59,8 @@ class AuthController extends ResourceController
             'status' => 200,
             'messages' => ['success' => 'Usuario logueado correctamente'],
             'token' => $token,
-            'id' => $idUser
+            'id' => $idUser,
+            'rol' => $idRoleUser
         ];
         return $this->respond($response);        
     }

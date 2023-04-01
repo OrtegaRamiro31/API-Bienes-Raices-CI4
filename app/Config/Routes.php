@@ -39,18 +39,20 @@ $routes->set404Override();
 
 $routes->resource('api/propiedades', ['controller' => 'PropiedadesController']);
 
-$routes->get('api/propiedadesvendedor', [PropiedadesVendedorController::class, 'index']);
-$routes->get('api/propiedadesvendedor/(:num)', [PropiedadesVendedorController::class, 'show']);
-
 $routes->get('api/vendedores', [VendedorController::class, 'index']);
 $routes->post('api/vendedores', [VendedorController::class, 'create']);
+$routes->get('api/vendedores/(:num)', [VendedorController::class, 'show/$1']);
 $routes->put('api/vendedores/(:num)', [VendedorController::class, 'update/$1']);
 $routes->delete('api/vendedores/(:num)', [VendedorController::class, 'delete/$1'], ['filter' => 'authFilter']);
 
-$routes->get('api/vendedores-roles/(:num)', [VendedorController::class, 'show/$1']);
+$routes->get('api/vendedores/propiedades', [PropiedadesVendedorController::class, 'index']);
+$routes->get('api/vendedores/propiedades/(:num)', [PropiedadesVendedorController::class, 'show/$1']);
+
+$routes->get('api/vendedores-roles/(:num)', [VendedorController::class, 'showSellerRole/$1']);
 $routes->get('api/vendedores-roles', [VendedorController::class, 'showAll']);
 
 $routes->get('api/roles', [RolesController::class, 'index']);
+$routes->get('api/vendedores/(:num)/roles', [RolesController::class, 'getSellerRoles/$1']);
 
 $routes->post('api/login', [AuthController::class, 'login']);
 $routes->post('api/logout', [AuthController::class, 'logout'], ['filter' => 'authFilter']);

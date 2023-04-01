@@ -24,6 +24,23 @@ class VendedorController extends ResourceController
         return $this->respond($data);
     }
 
+    public function show($id = null){
+        // $data['vendedor'] = $this->vendedorModel->where('id', $id)->first();
+        $rol = $this->vendedorModel
+                    ->select('rol_id')
+                    ->first();
+                   
+                                
+
+        $data['vendedor'] = $this->vendedorModel
+                            ->select('usuarios.*, rol.id, rol.rol')
+                            ->join('rol', 'usuarios.rol_id = rol.id')
+                            ->where('usuarios.id', $id)
+                            ->findAll();
+
+        return $this->respond($data);
+    }
+
     public function create(){
 
         $validation = \Config\Services::validation();
@@ -70,7 +87,7 @@ class VendedorController extends ResourceController
      * 
      * @return ResponseInterface&Json Devuelve un JSON con los registros o el mensaje de error
      */
-    public function show($id = null){       
+    public function showSellerRole($id = null){       
         $sellerRoleId = $this->vendedorModel
         ->select('usuarios.rol_id')
         ->join('rol', 'usuarios.rol_id = rol.id')
@@ -95,7 +112,7 @@ class VendedorController extends ResourceController
                 ->orderBy('usuarios.id')
                 ->findAll();
         }
-        elseif(intval($roleId) == 2){
+        elseif(intval($roleId) == 2 || intval($roleId) == 3){
             $vendedores['vendedores'] = $this->vendedorModel
             ->select('usuarios.*, rol.rol')
             ->join('rol', 'usuarios.rol_id = rol.id')
@@ -104,25 +121,27 @@ class VendedorController extends ResourceController
         } 
 
 
-        if($vendedores){
-            return $this->respond($vendedores);
+        if(!isset($vendedores)){
+            $response = [
+                'status' => 404,
+                'error' => true,
+                'messages' => ['error' => 'No se ha encontrado información'],
+            ];
+            return $this->respond($response);
         }
-        $response = [
-            'status' => 404,
-            'error' => true,
-            'messages' => ['error' => 'No se ha encontrado información'],
-        ];
-        return $this->respond($response);
+        return $this->respond($vendedores);
+
     }
 
 
     public function showAll($id = null){
         
-        $data['vendedores_roles'] =         $data['vendedores_roles'] = $this->vendedorModel
+        $data['vendedores_roles'] = $data['vendedores_roles'] = $this->vendedorModel
         ->select('usuarios.*, rol.rol')
         ->join('rol', 'usuarios.rol_id = rol.id')
         ->orderBy('usuarios.id')
         ->findAll();
+
         
         if($data){
             return $this->respond($data);

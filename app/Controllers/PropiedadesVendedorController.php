@@ -48,7 +48,7 @@ class PropiedadesVendedorController extends ResourceController
         if(!$vendedor){
             return $this->failNotFound('No se encontró información');
         }
-        $data = $this->getPropiedades($vendedor['rol_id'], $id);
+        $data['propiedadesVendedor'] = $this->getPropiedades($vendedor['rol_id'], $id);
 
         if(!$data){
             return $this->failNotFound('No se encontró información');
