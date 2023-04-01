@@ -16,7 +16,7 @@ class AuthController extends ResourceController
         $email = $this->request->getVar('email');
         $password = $this->request->getVar('password');
         $user = $model->where("email", $email)->first();
-
+        $idUser = $user['id'];
         // Si el usuario no existe...
         if(is_null($user)){
             $response = [
@@ -57,7 +57,8 @@ class AuthController extends ResourceController
         $response = [
             'status' => 200,
             'messages' => ['success' => 'Usuario logueado correctamente'],
-            'token' => $token
+            'token' => $token,
+            'id' => $idUser
         ];
         return $this->respond($response);        
     }
