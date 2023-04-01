@@ -16,7 +16,6 @@ class AuthController extends ResourceController
         $email = $this->request->getVar('email');
         $password = $this->request->getVar('password');
         $user = $model->where("email", $email)->first();
-        $idUser = $user['id'];
         // Si el usuario no existe...
         if(is_null($user)){
             $response = [
@@ -26,6 +25,7 @@ class AuthController extends ResourceController
             // sleep(rand(1,5));
             return $this->respond($response);
         }
+        $idUser = $user['id'];
 
         // Verificamos la contraseña. Devuelve true si coincide
         $passwordVerify = password_verify($password, $user['password']);

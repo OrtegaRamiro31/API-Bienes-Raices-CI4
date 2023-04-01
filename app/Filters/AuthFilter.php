@@ -39,7 +39,12 @@ class AuthFilter implements FilterInterface
         }
         if(is_null($token) || empty($token)){
             $response = service('response');
-            $response->setBody('Access denied');
+            $respondBody = [
+                'status' => 401,
+                'messages' => ['errors' => 'Accesso Denegado'],
+                'error' => true
+            ];
+            $response->setJSON($respondBody);
             $response->setStatusCode(401);
             return $response;
         }
@@ -48,7 +53,12 @@ class AuthFilter implements FilterInterface
         }
         catch(Exception $ex) {
             $response = service('response');
-            $response->setBody('Acces denieds');
+            $respondBody = [
+                'status' => 401,
+                'messages' => ['errors' => 'Accesso Denegado'],
+                'error' => true
+            ];
+            $response->setJSON($respondBody);
             $response->setStatusCode(401);
             return $response;
         }

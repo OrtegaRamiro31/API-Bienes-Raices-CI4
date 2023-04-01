@@ -60,7 +60,7 @@ class VendedorController extends ResourceController
         return $this->respondCreated($response);
     }
 
-    /**
+     /**
      * Función que obtiene los vendedores en base al rol.
      * Si un usuario tiene el rol 1 (Propietario), responde con todos los vendedores
      * Si un usuario tiene el rol 2 (vendedor), response con solo ese vendedor
@@ -70,55 +70,49 @@ class VendedorController extends ResourceController
      * 
      * @return ResponseInterface&Json Devuelve un JSON con los registros o el mensaje de error
      */
-    public function show($id = null){     
-        // Hacemos una consulta para obtener el vendedor con el $id capturado          
-        $vendedor = $this->vendedorModel
-        ->select('usuarios.*, rol.rol')
+    public function show($id = null){       
+        $sellerRoleId = $this->vendedorModel
+        ->select('usuarios.rol_id')
         ->join('rol', 'usuarios.rol_id = rol.id')
         ->where('usuarios.id', $id)
         ->first();
 
-        // Obtenemos el id del rol del vendedor
-        $idRol = $vendedor['rol_id'];
-
-        // Verificamos que rol tiene el usuario
-        switch(intval($idRol)){
-            // Si es 1 (Propietario) trae todos los registros
-            case 1:
-                $vendedores = $this->vendedorModel
-                    ->select('usuarios.*, rol.rol')
-                    ->join('rol', 'usuarios.rol_id = rol.id')
-                    ->orderBy('usuarios.id')
-                    ->findAll();
-                break;
-
-            // Si es 2 (Vendedor) trae solo ese registro
-            case 2: $vendedores = array($vendedor);
-                break;
-
-            // Si es cualquier otro, retornamos un JSON con el error
-            default:
-                $response = [
-                    'status' => 404,
-                    'error' => true,
-                    'messages' => ['error' => 'No se ha encontrado información'],
-                ];
-                return $this->respond($response);
-        }
-
-        // Si por no fue posible obtener mínimo un registro, retornamos JSON con el error
-        if(!$vendedores){
+        if(is_null($sellerRoleId)){
             $response = [
                 'status' => 404,
                 'error' => true,
-                'messages' => ['error' => 'No se ha encontrado información'],
+                'messages' => ['error' => 'Usuario o rol incorrectos'],
             ];
             return $this->respond($response);
         }
 
-        // Si se obtuvo al menos un registro, retornamos el vendedor(es)
-        $data['vendedores'] = $vendedores;
-        return $this->respond($data);
+        $roleId = $sellerRoleId['rol_id'];
+
+        if(intval($roleId) === 1){
+            $vendedores['vendedores'] = $this->vendedorModel
+                ->select('usuarios.*, rol.rol')
+                ->join('rol', 'usuarios.rol_id = rol.id')
+                ->orderBy('usuarios.id')
+                ->findAll();
+        }
+        elseif(intval($roleId) == 2){
+            $vendedores['vendedores'] = $this->vendedorModel
+            ->select('usuarios.*, rol.rol')
+            ->join('rol', 'usuarios.rol_id = rol.id')
+            ->where('usuarios.id', $id)
+            ->findAll();
+        } 
+
+
+        if($vendedores){
+            return $this->respond($vendedores);
+        }
+        $response = [
+            'status' => 404,
+            'error' => true,
+            'messages' => ['error' => 'No se ha encontrado información'],
+        ];
+        return $this->respond($response);
     }
 
 
