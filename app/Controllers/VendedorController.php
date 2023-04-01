@@ -111,7 +111,9 @@ class VendedorController extends ResourceController
             ];
             return $this->respond($response, 400);
         }
-    
+        // Hasheamos el password
+        $data['password'] = password_hash($data['password'], PASSWORD_BCRYPT);
+        
         // Actualizar
         $model->where('id', $id)->set($data)->update();
     
