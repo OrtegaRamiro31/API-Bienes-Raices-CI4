@@ -48,11 +48,11 @@ $routes->delete('api/vendedores/(:num)', [VendedorController::class, 'delete/$1'
 $routes->get('api/vendedores/propiedades', [PropiedadesVendedorController::class, 'index']);
 $routes->get('api/vendedores/propiedades/(:num)', [PropiedadesVendedorController::class, 'show/$1']);
 
-$routes->get('api/vendedores-roles/(:num)', [VendedorController::class, 'showSellerRole/$1']);
+$routes->get('api/vendedores/(:num)/roles/', [VendedorController::class, 'showSellerRole/$1']);
 $routes->get('api/vendedores-roles', [VendedorController::class, 'showAll']);
 
 $routes->get('api/roles', [RolesController::class, 'index']);
-$routes->get('api/vendedores/(:num)/roles', [RolesController::class, 'getSellerRoles/$1']);
+$routes->get('api/roles/(:num)/vendedor', [RolesController::class, 'getSellerRoles/$1']);
 
 $routes->post('api/login', [AuthController::class, 'login']);
 $routes->post('api/logout', [AuthController::class, 'logout'], ['filter' => 'authFilter']);

@@ -42,9 +42,10 @@ class AuthController extends ResourceController
         }
 
         // JWT
-        $key = getenv('JWT_SECRET');
+        $key = $_ENV['JWT_SECRET'];
         $iat = time(); // Tomamos fecha y hora actual
-        $exp = $iat + getenv('JWT_DURATION'); // Le sumamos 1 hora a $iat para la expiración
+        $exp = $iat + $_ENV['JWT_DURATION']; // Le sumamos 1 hora a $iat para la expiración
+
         $payload = array(
             'email' => $email,
             'iat' => $iat,

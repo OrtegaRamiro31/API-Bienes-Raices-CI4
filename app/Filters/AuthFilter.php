@@ -6,6 +6,8 @@ use CodeIgniter\Filters\FilterInterface;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Exception;
+use Firebase\JWT\ExpiredException;
+use Firebase\JWT\SignatureInvalidException;
 use Firebase\JWT\Key;
 use Firebase\JWT\JWT;
 
@@ -28,40 +30,68 @@ class AuthFilter implements FilterInterface
      */
     public function before(RequestInterface $request, $arguments = null)
     {
-        $key = getenv('JWT_SECRET');
+        $key = $_ENV['JWT_SECRET'];
         $header = $request->getHeaderLine("Authorization");
         $token = null;
-
         if(!empty($header)){
             if (preg_match('/Bearer\s(\S+)/', $header, $matches)) {
                 $token = $matches[1];
             }
         }
+        
         if(is_null($token) || empty($token)){
             $response = service('response');
             $respondBody = [
                 'status' => 401,
-                'messages' => ['errors' => 'Accesso Denegado'],
+                'messages' => ['errors' => 'Accesso Denegados'],
                 'error' => true
             ];
             $response->setJSON($respondBody);
             $response->setStatusCode(401);
             return $response;
         }
+        
         try{
-            $decoded = JWT::decode($token, new Key($key, 'HS256'));
+            $decode = JWT::decode($token, new Key($key, 'HS256'));
         }
+        catch(SignatureInvalidException $ex) {
+            $response = service('response');
+            $respondBody = [
+                'status' => 401,
+                'messages' => ['errors' => 'La sesión ha tenido un problema. Comuníquese con el departamente de TI.'],
+                'error' => true,
+                'typeError' => "SignatureInvalidException"
+            ];
+            $response->setJSON($respondBody);
+            $response->setStatusCode(401);
+            return $response;
+        }
+        catch(ExpiredException $ex){
+            $response = service('response');
+            $respondBody = [
+                'status' => 401,
+                'messages' => ['errors' => 'La sesión ha expirado'],
+                'error' => true,
+                'typeError' => 'ExpiredException'
+            ];
+            $response->setJSON($respondBody);
+            $response->setStatusCode(401);
+            return $response;
+        }
+
         catch(Exception $ex) {
             $response = service('response');
             $respondBody = [
                 'status' => 401,
-                'messages' => ['errors' => 'Accesso Denegado'],
-                'error' => true
+                'messages' => ['errors' => 'Accesso Denegado'.$ex->getMessage()],
+                'error' => true,
+                'typeError' => 'Exception'
             ];
             $response->setJSON($respondBody);
             $response->setStatusCode(401);
             return $response;
         }
+
     }
 
 
