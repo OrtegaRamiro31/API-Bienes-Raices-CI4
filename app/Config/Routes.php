@@ -37,12 +37,16 @@ $routes->set404Override();
 // route since we don't have to scan directories.
 //$routes->get('/', 'Home::index');
 
-$routes->resource('api/propiedades', ['controller' => 'PropiedadesController']);
+$routes->get('api/propiedades', [PropiedadesController::class, 'index']);
+$routes->get('api/propiedades/(:num)', [PropiedadesController::class, 'show/$1']);
+$routes->post('api/propiedades', [PropiedadesController::class, 'create'], ['filter' => 'authFilter']);
+$routes->put('api/propiedades/(:num)', [PropiedadesController::class, 'update/$1'], ['filter' => 'authFilter']);
+$routes->delete('api/propiedades/(:num)', [PropiedadesController::class, 'delete/$1'], ['filter' => 'authFilter']);
 
 $routes->get('api/vendedores', [VendedorController::class, 'index']);
-$routes->post('api/vendedores', [VendedorController::class, 'create']);
 $routes->get('api/vendedores/(:num)', [VendedorController::class, 'show/$1']);
-$routes->put('api/vendedores/(:num)', [VendedorController::class, 'update/$1']);
+$routes->post('api/vendedores', [VendedorController::class, 'create'], ['filter' => 'authFilter']);
+$routes->put('api/vendedores/(:num)', [VendedorController::class, 'update/$1'], ['filter' => 'authFilter']);
 $routes->delete('api/vendedores/(:num)', [VendedorController::class, 'delete/$1'], ['filter' => 'authFilter']);
 
 $routes->get('api/vendedores/propiedades', [PropiedadesVendedorController::class, 'index']);
