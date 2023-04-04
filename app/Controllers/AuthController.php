@@ -9,13 +9,23 @@ use Firebase\JWT\Key;
 
 class AuthController extends ResourceController
 {
+    protected $vendedorModel;
+
+    public function __construct()
+    {
+        $this->vendedorModel = new VendedorModel();   
+    }
 
     public function login(){
-        $model = new VendedorModel();
 
         $email = $this->request->getVar('email');
         $password = $this->request->getVar('password');
-        $user = $model->where("email", $email)->first();
+        $user = $this->vendedorModel->where("email", $email)->first();
+        // $user = $model
+        //         ->select('usuarios.*, rol.rol')
+        //         ->join('rol', 'usuarios.rol_id = rol.id')
+        //         ->where("email", $email)
+        //         ->first();
         // Si el usuario no existe...
         if(is_null($user)){
             $response = [
@@ -27,6 +37,7 @@ class AuthController extends ResourceController
         }
         $idUser = $user['id'];
         $idRoleUser = $user['rol_id'];
+
 
         // Verificamos la contraseña. Devuelve true si coincide
         $passwordVerify = password_verify($password, $user['password']);
@@ -66,8 +77,7 @@ class AuthController extends ResourceController
         return $this->respond($response);        
     }
 
-    public function logout(){
-        $model = new VendedorModel();
+    public function logout(){   
 
         $email = $this->request->getVar('email');
         $token = $this->request->getVar('token');
