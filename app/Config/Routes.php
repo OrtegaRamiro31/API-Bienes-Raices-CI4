@@ -3,6 +3,7 @@
 namespace Config;
 
 use App\Controllers\AuthController;
+use App\Controllers\BlogsController;
 use App\Controllers\PropiedadesController;
 use App\Controllers\PropiedadesVendedorController;
 use App\Controllers\RolesController;
@@ -57,6 +58,8 @@ $routes->get('api/vendedores-roles', [VendedorController::class, 'showAll']);
 
 $routes->get('api/roles', [RolesController::class, 'index']);
 $routes->get('api/roles/(:num)/vendedor', [RolesController::class, 'getSellerRoles/$1']);
+
+$routes->get('api/blogs', [BlogsController::class, 'index']);
 
 $routes->post('api/login', [AuthController::class, 'login']);
 $routes->post('api/logout', [AuthController::class, 'logout'], ['filter' => 'authFilter']);
