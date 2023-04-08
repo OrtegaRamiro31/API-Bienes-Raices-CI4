@@ -25,7 +25,6 @@ class VendedorController extends ResourceController
     }
 
     public function show($id = null){
-        // $data['vendedor'] = $this->vendedorModel->where('id', $id)->first();
         $rol = $this->vendedorModel
                     ->select('rol_id')
                     ->first();
