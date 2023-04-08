@@ -154,6 +154,7 @@ class BlogsController extends ResourceController
 
     public function indexBySeller($sellerId){
         $blogs['blogs'] = $this->blogModel
+                    ->select('blogs.*, usuarios.nombre, usuarios.apellido')
                     ->join('usuarios', 'vendedores_id = usuarios.id')
                     ->where('vendedores_id', $sellerId)
                     ->findAll();
