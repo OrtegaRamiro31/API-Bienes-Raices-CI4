@@ -23,7 +23,7 @@ class PropiedadesController extends ResourceController
         if($data){
             return $this->respond($data);
         }
-        return $this->failNotFound('No Data Found With id '.$id);
+        return $this->failNotFound('No se encontró información con el id: '.$id);
     }
 
     public function create(){
@@ -104,14 +104,6 @@ class PropiedadesController extends ResourceController
         ];
         return $this->respond($response);
     }
-    // if (!$model->validate($data)) {
-    //     return $this->respond(
-    //         [
-    //             'status' => 400, 
-    //             'messages' => [
-    //                 'errors' => $model->errors()]
-    //             ]);
-    // }
 
     // Actualizar
     $model->where('id', $id)->set($data)->update();
