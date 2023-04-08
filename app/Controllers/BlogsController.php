@@ -119,4 +119,36 @@ class BlogsController extends ResourceController
     }
     return $this->failNotFound('No se pudo actualizar el blog con ID ' . $id);
     }
+
+    public function delete($id = null){
+
+        $blog = $this->blogModel->find($id);
+
+        if($blog === null){
+            $response = [
+                'status'   => 404,
+                'error'    => true,
+                'messages' => [
+                    'errors' => "Blog no encontrado"
+                ]
+            ];
+            return $this->respond($response);
+        }
+        
+        $delete = $this->blogModel->delete($id);
+
+        if(!$delete) {
+            return $this->failServerError('No pudo eliminarse el blog');
+        }
+
+        $response = [
+            'status'   => 204,
+            'error'    => null,
+            'messages' => [
+                'success' => 'Blog eliminado correctamente'
+            ]
+        ];
+        return $this->respond($response);
+        
+    }
 }

@@ -63,6 +63,7 @@ $routes->get('api/blogs', [BlogsController::class, 'index']);
 $routes->post('api/blogs', [BlogsController::class, 'create'], ['filter' => 'authFilter']);
 $routes->get('api/blogs/(:num)', [BlogsController::class, 'show/$1']);
 $routes->put('api/blogs/(:num)', [BlogsController::class, 'update/$1']);
+$routes->delete('api/blogs/eliminar/(:num)', [BlogsController::class, 'delete/$1']);
 
 $routes->post('api/login', [AuthController::class, 'login']);
 $routes->post('api/logout', [AuthController::class, 'logout'], ['filter' => 'authFilter']);
