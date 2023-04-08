@@ -29,7 +29,9 @@ class BlogsController extends ResourceController
     public function show($id = null)
     {
         $data = $this->blogModel
-                ->where('id', $id)
+                ->select('blogs.*, usuarios.nombre, usuarios.apellido')
+                ->join('usuarios', 'blogs.vendedores_id = usuarios.id')
+                ->where('blogs.id', $id)
                 ->first();
         if($data){
             return $this->respond($data);
