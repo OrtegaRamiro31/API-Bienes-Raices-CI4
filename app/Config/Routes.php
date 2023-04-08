@@ -60,6 +60,7 @@ $routes->get('api/roles', [RolesController::class, 'index']);
 $routes->get('api/roles/(:num)/vendedor', [RolesController::class, 'getSellerRoles/$1']);
 
 $routes->get('api/blogs', [BlogsController::class, 'index']);
+$routes->get('api/blogs/vendedor/(:num)', [BlogsController::class, 'indexBySeller/$1']);
 $routes->post('api/blogs', [BlogsController::class, 'create'], ['filter' => 'authFilter']);
 $routes->get('api/blogs/(:num)', [BlogsController::class, 'show/$1']);
 $routes->put('api/blogs/(:num)', [BlogsController::class, 'update/$1']);

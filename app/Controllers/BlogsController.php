@@ -151,4 +151,24 @@ class BlogsController extends ResourceController
         return $this->respond($response);
         
     }
+
+    public function indexBySeller($sellerId){
+        $blogs = $this->blogModel
+                    ->where('vendedores_id', $sellerId)
+                    ->findAll();
+
+        
+        if(empty($blogs)){
+            $response = [
+                'status'   => 404,
+                'error'    => true,
+                'messages' => [
+                    'errors' => "Blogs no encontrados"
+                ]
+            ];
+            return $this->respond($response);
+        }
+
+        return $this->respond($blogs);
+    }
 }
